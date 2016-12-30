@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ScoreKeeper</string>
+    <string-array name="main_tab_titles">
+        <item>New Game</item>
+        <item>History</item>
+        <item>Players</item>
+        <item>Courses</item>
+    </string-array>
+</resources>

@@ -3,17 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:text="Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/button" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_main_fragment_3"
-        android:layout_below="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

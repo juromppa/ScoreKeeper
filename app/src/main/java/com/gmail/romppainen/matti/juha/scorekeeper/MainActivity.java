@@ -9,8 +9,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), MainActivity
                 .this);
         viewPager.setAdapter(pagerAdapter);
@@ -30,11 +34,56 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onPageSelected(int position) {}
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        if (viewPager.getCurrentItem() == 0){
+            menu.findItem(R.id.action_new_player).setVisible(false);
+            menu.findItem(R.id.action_new_course).setVisible(false);
+        } else if(viewPager.getCurrentItem() == 1){
+            menu.findItem(R.id.action_new_player).setVisible(false);
+            menu.findItem(R.id.action_new_course).setVisible(false);
+        } else if(viewPager.getCurrentItem() == 2) {
+            menu.findItem(R.id.action_new_player).setVisible(true);
+            menu.findItem(R.id.action_new_course).setVisible(false);
+        } else if(viewPager.getCurrentItem() == 3) {
+            menu.findItem(R.id.action_new_player).setVisible(false);
+            menu.findItem(R.id.action_new_course).setVisible(true);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.action_new_player:
+                MainActivityTabFragment3.NewPlayer(this);
+                return true;
+            case R.id.action_new_course:
+                MainActivityTabFragment4.NewCourse(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     class PagerAdapter extends FragmentPagerAdapter {

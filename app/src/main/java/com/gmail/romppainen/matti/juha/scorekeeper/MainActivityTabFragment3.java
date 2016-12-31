@@ -1,5 +1,6 @@
 package com.gmail.romppainen.matti.juha.scorekeeper;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Juha on 28.12.2016.
@@ -43,6 +45,10 @@ public class MainActivityTabFragment3 extends Fragment {
         rv.setLayoutManager(llm);
 
         return rootView;
+    }
+
+    public static void NewPlayer(Context context) {
+        Toast.makeText(context, "New player", Toast.LENGTH_SHORT).show();
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {

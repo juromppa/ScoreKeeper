@@ -6,4 +6,6 @@
         <item>Players</item>
         <item>Courses</item>
     </string-array>
+    <string name="menu_new_course">New course</string>
+    <string name="menu_new_player">New</string>
 </resources>

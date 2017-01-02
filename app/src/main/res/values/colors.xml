@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="buttonPressed">#FF4081</color>
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#FF4081</color>
     <color name="mainTabColor">#FFFFFF</color>
     <color name="mainTabColorDark">#A0A0A0</color>
+    <color name="textColor">#000000</color>
     <color name="windowBackground">#FAFAFA</color>
 </resources>

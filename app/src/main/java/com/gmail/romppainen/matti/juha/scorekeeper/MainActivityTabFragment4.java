@@ -20,6 +20,9 @@ public class MainActivityTabFragment4 extends Fragment {
     String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
             "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
             "Linux", "OS/2", "iPhone", "WindowsMobile",
+            "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+            "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+            "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
             "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X"};
 
     public MainActivityTabFragment4() {
@@ -63,7 +66,7 @@ public class MainActivityTabFragment4 extends Fragment {
             MyViewHolder(View v) {
                 super(v);
 
-                mTextView = (TextView) v.findViewById(R.id.label);
+                mTextView = (TextView) v.findViewById(R.id.course_name);
             }
         }
 
@@ -76,7 +79,7 @@ public class MainActivityTabFragment4 extends Fragment {
         @Override
         public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             // create a new view
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.players_item,
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.courses_item,
                     parent, false);
             // set the view's size, margins, paddings and layout parameters
             return new MyViewHolder(v);

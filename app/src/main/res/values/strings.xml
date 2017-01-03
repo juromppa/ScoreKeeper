@@ -6,7 +6,7 @@
         <item>Players</item>
         <item>Courses</item>
     </string-array>
-    <string name="menu_new_course">New course</string>
+    <string name="menu_new_course">New</string>
     <string name="menu_new_player">New</string>
 
     <string name="dialog_new_player_cancel_button">Cancel</string>

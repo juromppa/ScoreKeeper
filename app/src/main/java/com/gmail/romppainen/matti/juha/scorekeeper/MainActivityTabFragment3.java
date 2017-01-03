@@ -6,13 +6,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Juha on 28.12.2016.
@@ -20,8 +27,8 @@ import java.util.ArrayList;
 
 public class MainActivityTabFragment3 extends Fragment {
 
-    private DatabaseOperations mydb;
-    private RecyclerView recyclerView;
+    private static DatabaseOperations mydb;
+    private static RecyclerView recyclerView;
     private TextView emptyView;
 
     public MainActivityTabFragment3() {
@@ -53,11 +60,11 @@ public class MainActivityTabFragment3 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ArrayList array_list = mydb.getAllPlayers();
-        MyAdapter adapter = new MyAdapter(array_list);
+        List<Player> players = mydb.getAllPlayers();
+        MyAdapter adapter = new MyAdapter(players);
         recyclerView.setAdapter(adapter);
 
-        if (array_list.isEmpty()) {
+        if (players.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
         }
@@ -84,6 +91,12 @@ public class MainActivityTabFragment3 extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EditText mEdit = (EditText) dialog.findViewById(R.id.dialog_new_player_edit);
+                Player player = new Player(mEdit.getText().toString());
+                mydb.addPlayer(player);
+                List<Player> players = mydb.getAllPlayers();
+                MyAdapter adapter = new MyAdapter(players);
+                recyclerView.setAdapter(adapter);
                 dialog.dismiss();
             }
         });
@@ -91,27 +104,29 @@ public class MainActivityTabFragment3 extends Fragment {
         dialog.show();
     }
 
-    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-        private ArrayList mDataset;
+    private static class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+        private List<Player> players;
 
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
         class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView mTextView;
-            TextView mTextView2;
+            ImageView favorite;
+            TextView name;
+            TextView created;
 
             MyViewHolder(View v) {
                 super(v);
 
-                mTextView = (TextView) v.findViewById(R.id.label);
-                mTextView2 = (TextView) v.findViewById(R.id.selected);
+                favorite = (ImageView) v.findViewById(R.id.player_favorite);
+                name = (TextView) v.findViewById(R.id.player_name);
+                created = (TextView) v.findViewById(R.id.player_created);
             }
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        MyAdapter(ArrayList myDataset) {
-            mDataset = myDataset;
+        MyAdapter(List data) {
+            players = data;
         }
 
         // Create new views (invoked by the layout manager)
@@ -121,19 +136,44 @@ public class MainActivityTabFragment3 extends Fragment {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.players_item,
                     parent, false);
             // set the view's size, margins, paddings and layout parameters
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int itemPosition = recyclerView.getChildLayoutPosition(v);
+                    Log.i(TAG, players.get(itemPosition).getName());
+                }
+            });
             return new MyViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            String[] playerData = mydb.getPlayerData(position);
-            holder.mTextView.setText(playerData[1]);
-            holder.mTextView2.setText(playerData[2]);
+        public void onBindViewHolder(MyViewHolder holder, final int position) {
+            if (players.get(position).getFavorite()) {
+                holder.favorite.setImageResource(R.drawable.ic_favorite);
+            } else {
+                holder.favorite.setImageResource(R.drawable.ic_favorite_disabled);
+            }
+            holder.favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    players.get(position).setFavorite(!players.get(position).getFavorite());
+                    mydb.updatePlayer(players.get(position));
+                    List<Player> players = mydb.getAllPlayers();
+                    MyAdapter adapter = new MyAdapter(players);
+                    recyclerView.setAdapter(adapter);
+                }
+            });
+
+            holder.name.setText(players.get(position).getName());
+            Date date = new Date(players.get(position).getCreated() * 1000L);
+            SimpleDateFormat df2 = new SimpleDateFormat("MM/dd/yyyy");
+            String dateText = df2.format(date);
+            holder.created.setText(dateText);
         }
 
         @Override
         public int getItemCount() {
-            return mDataset.size();
+            return players.size();
         }
     }
 }

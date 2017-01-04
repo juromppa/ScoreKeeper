@@ -109,7 +109,7 @@ class DatabaseOperations extends SQLiteOpenHelper {
         return db.update("players", values, "id = ?", new String[]{String.valueOf(player.getId())});
     }
 
-    void deleteContact(Player player) {
+    void deletePlayer(Player player) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("players", "id = ?", new String[] { String.valueOf(player.getId()) });
         db.close();

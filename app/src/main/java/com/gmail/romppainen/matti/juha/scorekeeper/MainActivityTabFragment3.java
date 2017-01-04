@@ -1,25 +1,22 @@
 package com.gmail.romppainen.matti.juha.scorekeeper;
 
 import android.app.Dialog;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Juha on 28.12.2016.
@@ -27,8 +24,8 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivityTabFragment3 extends Fragment {
 
-    private static DatabaseOperations mydb;
-    private static RecyclerView recyclerView;
+    private DatabaseOperations mydb;
+    private RecyclerView recyclerView;
     private TextView emptyView;
 
     public MainActivityTabFragment3() {
@@ -54,6 +51,8 @@ public class MainActivityTabFragment3 extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
 
+        setHasOptionsMenu(true);
+
         return rootView;
     }
 
@@ -74,12 +73,33 @@ public class MainActivityTabFragment3 extends Fragment {
         }
     }
 
-    public static void NewPlayer(Context context) {
-        // custom dialog
-        final Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.dialog_add_player);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.action_new_player:
+                DialogNewPlayer();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-        Button cancelButton = (Button) dialog.findViewById(R.id.dialog_new_player_cancel_button);
+    public void DialogNewPlayer() {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_player_name);
+
+        final TextView title = (TextView) dialog.findViewById(R.id.dialog_player_name_title);
+        title.setText(R.string.dialog_player_name_title_new);
+
+        final EditText mEdit = (EditText) dialog.findViewById(R.id.dialog_player_name_edit_text);
+        mEdit.requestFocus();
+        if(mEdit.requestFocus()) {
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
+                    .SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.dialog_player_name_button_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,24 +107,31 @@ public class MainActivityTabFragment3 extends Fragment {
             }
         });
 
-        Button saveButton = (Button) dialog.findViewById(R.id.dialog_new_player_save_button);
+        Button saveButton = (Button) dialog.findViewById(R.id.dialog_player_name_button_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText mEdit = (EditText) dialog.findViewById(R.id.dialog_new_player_edit);
-                Player player = new Player(mEdit.getText().toString());
-                mydb.addPlayer(player);
-                List<Player> players = mydb.getAllPlayers();
-                MyAdapter adapter = new MyAdapter(players);
-                recyclerView.setAdapter(adapter);
-                dialog.dismiss();
+                String name = mEdit.getText().toString();
+                name = name.trim();
+                if (name.length() > 0) {
+                    Player player = new Player();
+                    player.setName(name);
+                    mydb.addPlayer(player);
+                    List<Player> players = mydb.getAllPlayers();
+                    MyAdapter adapter = new MyAdapter(players);
+                    recyclerView.setAdapter(adapter);
+                    dialog.dismiss();
+                } else {
+                    TextView help = (TextView) dialog.findViewById(R.id.dialog_player_name_help);
+                    help.setVisibility(View.VISIBLE);
+                }
             }
         });
 
         dialog.show();
     }
 
-    private static class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         private List<Player> players;
 
         // Provide a reference to the views for each data item
@@ -140,14 +167,16 @@ public class MainActivityTabFragment3 extends Fragment {
                 @Override
                 public void onClick(View v) {
                     int itemPosition = recyclerView.getChildLayoutPosition(v);
-                    Log.i(TAG, players.get(itemPosition).getName());
+                    Intent i = new Intent(getActivity(), PlayerActivity.class);
+                    i.putExtra("Player", players.get(itemPosition));
+                    startActivity(i);
                 }
             });
             return new MyViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, final int position) {
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
             if (players.get(position).getFavorite()) {
                 holder.favorite.setImageResource(R.drawable.ic_favorite);
             } else {
@@ -156,8 +185,9 @@ public class MainActivityTabFragment3 extends Fragment {
             holder.favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    players.get(position).setFavorite(!players.get(position).getFavorite());
-                    mydb.updatePlayer(players.get(position));
+                    players.get(holder.getAdapterPosition()).setFavorite(!players.get(holder
+                            .getAdapterPosition()).getFavorite());
+                    mydb.updatePlayer(players.get(holder.getAdapterPosition()));
                     List<Player> players = mydb.getAllPlayers();
                     MyAdapter adapter = new MyAdapter(players);
                     recyclerView.setAdapter(adapter);
@@ -165,10 +195,7 @@ public class MainActivityTabFragment3 extends Fragment {
             });
 
             holder.name.setText(players.get(position).getName());
-            Date date = new Date(players.get(position).getCreated() * 1000L);
-            SimpleDateFormat df2 = new SimpleDateFormat("MM/dd/yyyy");
-            String dateText = df2.format(date);
-            holder.created.setText(dateText);
+            holder.created.setText(Utils.ConvertDate(players.get(position).getCreated()));
         }
 
         @Override

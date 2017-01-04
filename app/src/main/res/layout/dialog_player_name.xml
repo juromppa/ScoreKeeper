@@ -4,7 +4,6 @@
     android:layout_height="fill_parent" >
 
     <TextView
-        android:text="@string/dialog_new_player_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -14,50 +13,63 @@
         android:layout_marginRight="24dp"
         android:layout_marginLeft="24dp"
         android:textSize="24sp"
-        android:id="@+id/dialog_new_player_title" />
+        android:id="@+id/dialog_player_name_title" />
 
     <EditText
-        android:id="@+id/dialog_new_player_edit"
+        android:id="@+id/dialog_player_name_edit_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="24dp"
-        android:layout_marginBottom="24dp"
         android:layout_marginLeft="24dp"
         android:inputType="textCapWords"
-        android:layout_below="@+id/dialog_new_player_title" />
+        android:layout_below="@+id/dialog_player_name_title" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="24dp"
+        android:layout_marginLeft="24dp"
+        android:textSize="10sp"
+        android:textColor="@color/colorAccent"
+        android:text="@string/dialog_player_name_help"
+        android:visibility="gone"
+        android:layout_below="@+id/dialog_player_name_edit_text"
+        android:id="@+id/dialog_player_name_help" />
 
     <Button
-        android:id="@+id/dialog_new_player_save_button"
+        android:id="@+id/dialog_player_name_button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_new_player_save_button"
+        android:text="@string/dialog_player_name_button_save"
         android:textColor="@color/colorAccent"
         android:paddingTop="20dp"
         android:paddingRight="8dp"
         android:paddingBottom="20dp"
         android:paddingLeft="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_below="@+id/dialog_new_player_edit"
+        android:layout_below="@+id/dialog_player_name_help"
         android:layout_alignParentRight="true"
         android:theme="@style/FlatButton"
         style="@style/Widget.AppCompat.Button.Borderless" />
 
     <Button
-        android:id="@+id/dialog_new_player_cancel_button"
+        android:id="@+id/dialog_player_name_button_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_new_player_cancel_button"
+        android:text="@string/dialog_player_name_button_cancel"
         android:textColor="@color/colorAccent"
         android:paddingTop="20dp"
         android:paddingRight="8dp"
         android:paddingBottom="20dp"
         android:paddingLeft="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="24dp"
-        android:layout_below="@+id/dialog_new_player_edit"
-        android:layout_toLeftOf="@+id/dialog_new_player_save_button"
+        android:layout_below="@+id/dialog_player_name_help"
+        android:layout_toLeftOf="@+id/dialog_player_name_button_save"
         android:theme="@style/FlatButton"
         style="@style/Widget.AppCompat.Button.Borderless" />
 

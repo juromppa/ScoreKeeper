@@ -14,5 +14,5 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:visibility="gone"
-        android:text="@string/recyclerview_no_players" />
+        android:text="@string/recycler_view_no_players" />
 </RelativeLayout>

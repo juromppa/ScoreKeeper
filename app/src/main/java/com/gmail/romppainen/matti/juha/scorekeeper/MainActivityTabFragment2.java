@@ -55,7 +55,7 @@ public class MainActivityTabFragment2 extends Fragment {
             MyViewHolder(View v) {
                 super(v);
 
-                mTextView = (TextView) v.findViewById(R.id.course_name);
+                mTextView = (TextView) v.findViewById(R.id.course_list_name);
             }
         }
 

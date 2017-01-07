@@ -9,13 +9,18 @@
     <string name="menu_new_course">New</string>
     <string name="menu_new_player">New</string>
 
+    <string name="course_activity_created_title">Created:</string>
+    <string name="course_activity_holes_title">Holes:</string>
+    <string name="course_activity_par_title">Par:</string>
+    <string name="recycler_view_no_courses">No courses</string>
+
     <string name="dialog_player_name_button_cancel">Cancel</string>
     <string name="dialog_player_name_button_save">Save</string>
-    <string name="player_activity_created_title">Created:</string>
     <string name="dialog_player_name_help">Please give player name</string>
-    <string name="player_activity_last_game_title">Last game:</string>
     <string name="dialog_player_name_title_edit">Edit player</string>
     <string name="dialog_player_name_title_new">New player</string>
-
+    <string name="player_activity_created_title">Created:</string>
+    <string name="player_activity_last_game_title">Last game:</string>
     <string name="recycler_view_no_players">No players</string>
+
 </resources>
